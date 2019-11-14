@@ -86,14 +86,19 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
     }
     
     private func getThumbnailWithFile(_ path: String,_ quality: NSNumber,_ position: NSNumber,_ result: FlutterResult) {
-        let fileName = Utility.getFileName(path)
-        let url = Utility.getPathUrl("\(Utility.basePath())/\(fileName).jpg")
-        Utility.deleteFile(path)
-        if let bitmap = getBitMap(path,quality,position,result) {
-            guard (try? bitmap.write(to: url)) != nil else {
-                return result(FlutterError(code: channelName,message: "getThumbnailWithFile error",details: "getThumbnailWithFile error"))
+        do{
+            let fileName = Utility.getFileName(path)
+            let url = Utility.getPathUrl("\(Utility.basePath())/\(fileName).jpg")
+            Utility.deleteFile(path)
+            if let bitmap = getBitMap(path,quality,position,result) {
+                guard (try? bitmap.write(to: url)) != nil else {
+                    return result(FlutterError(code: channelName,message: "getThumbnailWithFile error",details: "getThumbnailWithFile error"))
+                }
+                result(Utility.excludeFileProtocol(url.absoluteString))
             }
-            result(Utility.excludeFileProtocol(url.absoluteString))
+        } catch {
+            print(error);
+            return result(FlutterError(code: channelName,message: "getThumbnailWithFile error",details: "getThumbnailWithFile error"))
         }
     }
     
