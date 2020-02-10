@@ -52,9 +52,9 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
             }
         }
 
-        if (includeAudio != null && !includeAudio) {
-            cmdArray.add("-an")
-        }
+        //if (includeAudio != null && !includeAudio) {
+        //cmdArray.add("-an")
+        //}
 
         if (frameRate != null) {
             cmdArray.add("-r")
